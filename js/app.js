@@ -11,7 +11,7 @@ let cardSelected = false; // track how many cards the user has chosen per turn (
 let timer = 0; // timer in seconds
 let resetButtonActive = false; // sets state of reset button eventListener
 let starCount = STARS; // tracks how many stars the user has.
-
+let checkEndGame = false; // track if the game should end.
 
 // Set up board and initialise values
 function initialise() {
@@ -37,7 +37,7 @@ function setStars() {
 }
 
 // build the deck and return the deck
-let arr_deck = () => {
+let deck = () => {
     // check that CARD_PAIRS is half of CARDS (if not then throw error)
     // Create an array and put in each value twice // can use CARDS as the count
     // return deck array
@@ -61,7 +61,7 @@ function shuffle(array) {
 }
 
 // build the deck of cards depending up on how many cards there are
-function dealCards(arr_deck) {
+function dealCards(deck) {
     // check if cards exist in DOM
         // if they do - clean board (remove items
     // build board
@@ -113,7 +113,7 @@ function endGame() {
 
 //flip card and nominate direction (optional)
 function flipCard(card, direction) {
-    // direction it can be forwards or reverse
+    // direction it can be forwards (blank) or reverse
     // get card selected
     // check direction
         //if reverse
@@ -152,13 +152,14 @@ initialise();
 // play again (same as reset button)
     // initialise
     // remove endGame panel
-    //startTimer();
+    // checkEndGame = false;
+    // startTimer();
     // enable reset button
 
 // cards (on cards click - put on parent)
     // check if cardSelected = false;
         // if cardSelected = false;(1st choice) - allow another card to be flipped
-            // flipcard()
+            // flipcard(this)
             // set show on card (this is what you will search against)
             // set cardSelected = true
         // if cardSelected = true; (2nd choice)
@@ -171,11 +172,16 @@ initialise();
                     //add match to this cards class
                     // add 1 to cardsMatched
                     // check if cardsMatched = CARDS
-                        // endGame()
+                        // checkEndGame = true
                 //if it is not a match        
                     //remove show on other card
-                    // flipCards('reverse')
+                    // flipCards(this, 'reverse')
                     // reinstate eventListeners on cards
+    // check if STAR_REDUCTION === turns
+        // if true - reduceStars()
+    // check if checkEndGame = true;
+        // if true - endGame() 
+    
     
 
 
@@ -184,7 +190,7 @@ initialise();
 
 
 
-/* ------------------------------------------------------------------------------ */
+/* --- INSTRUCTIONS GIVEN BY UDACITY --- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 /*function shuffle(array) {
