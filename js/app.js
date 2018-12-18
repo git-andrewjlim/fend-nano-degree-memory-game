@@ -15,7 +15,7 @@ let starCount = STARS; // tracks how many stars the user has.
 
 // Set up board and initialise values
 function initialise() {
-    stars();
+    setStars();
     deck();
     //shuffle(deck); // uncomment when ready
     dealCards();
@@ -27,20 +27,19 @@ function initialise() {
 }
 
 // Build the star value based upon constant STARS value
-let stars = () => {
+function setStars() {
     // if firstGame = true
         // grab the ul with .stars
         // for the numer of STARS value add <li><i class="fa fa-star"></i></li>
-        //return stars - to be used with reduceStars function
     // else 
         // reset stars to fa-star (they would of been turned over)
     console.log('your in the stars');
 }
 
 // build the deck and return the deck
-let deck = () => {
+let arr_deck = () => {
     // check that CARD_PAIRS is half of CARDS (if not then throw error)
-    // Create an and put in each value twice // can use CARDS as the count
+    // Create an array and put in each value twice // can use CARDS as the count
     // return deck array
     console.log('your in the deck');
 }
@@ -62,7 +61,7 @@ function shuffle(array) {
 }
 
 // build the deck of cards depending up on how many cards there are
-function dealCards(deck) {
+function dealCards(arr_deck) {
     // check if cards exist
         // if they do - clean board
         // if not build board
@@ -99,7 +98,8 @@ function startTimer() {
 }
 
 // reduce stars depending on how many turns the player had
-function reduceStars(stars) {
+function reduceStars() {
+    // get the last child of ul.stars
     // if STARS % cardsMatched ==0 change the next fa-star to fa-star-o
     // reduce starCount by one until it reaches zero.
 }
