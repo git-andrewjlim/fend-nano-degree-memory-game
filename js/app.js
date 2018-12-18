@@ -62,18 +62,18 @@ function shuffle(array) {
 
 // build the deck of cards depending up on how many cards there are
 function dealCards(arr_deck) {
-    // check if cards exist
-        // if they do - clean board
-        // if not build board
-    // get the ul with .deck
-    // for each value within the deck add the following:
-    /*
-        <li class="card">
-            <i class="fa"></i>
-        </li>
-    */
-   // add eventListener for ul .cards
-   // add a value to each class by getting the deck and adding 'fa-' to the front of it.
+    // check if cards exist in DOM
+        // if they do - clean board (remove items
+    // build board
+        // get the ul with .deck
+        // for each value within the deck add the following:
+        /*
+            <li class="card">
+                <i class="fa"></i>
+            </li>
+        */
+        // add eventListener for ul .cards
+        // add a value to each class by getting the deck and adding 'fa-' to the front of it.
 }
 
 // reset the timer to 0
