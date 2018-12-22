@@ -3,6 +3,7 @@ const CARDS = 16;
 const CARD_PAIRS = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
 const STARS = 3;
 const STAR_REDUCTION = CARD_PAIRS.length + 1;
+const docFragment = document.createDocumentFragment();
 
 let firstGame = true; // determines whether instructions need to be shown at beginning of game.
 let turns = 0; // track how many guesses the user has made.
@@ -12,13 +13,14 @@ let timer = 0; // timer in seconds
 let resetButtonActive = false; // sets state of reset button eventListener
 let starCount = STARS; // tracks how many stars the user has.
 let checkEndGame = false; // track if the game should end.
+let deck = [];
 
 // Set up board and initialise values
 function initialise() {
     setStars();
-    deck();
-    //shuffle(deck); // uncomment when ready
-    dealCards();
+    deck = fillDeck();
+    deck = shuffle(deck);
+    dealCards(deck);
     resetTimer();
     resetTurns();
     if (firstGame) {
@@ -29,19 +31,35 @@ function initialise() {
 // Build the star value based upon constant STARS value
 function setStars() {
     // if firstGame = true
+    if (firstGame) {
         // grab the ul with .stars
+        let starList = document.querySelector('.stars');
         // for the numer of STARS value add <li><i class="fa fa-star"></i></li>
-    // else 
-        // reset stars to fa-star (they would of been turned over)
-    console.log('your in the stars');
+        let starItem = '<li><i class="fa fa-star"></i></li>';
+        for(let i=0; i<STARS; i++) {
+            let starItem = document.createElement('li');
+            starItem.innerHTML = '<i class="fa fa-star"></i>';
+            starList.appendChild(starItem);
+        }
+    }else{
+        // @todo reset stars to fa-star (they would of been turned over)
+    }  
 }
 
 // build the deck and return the deck
-let deck = () => {
+function fillDeck() {
     // check that CARD_PAIRS is half of CARDS (if not then throw error)
-    // Create an array and put in each value twice // can use CARDS as the count
-    // return deck array
-    console.log('your in the deck');
+    let arr_fillDeck = [];
+    if (CARD_PAIRS.length * 2 === CARDS){
+        // Create an array and put in each value twice // can use CARDS as the count
+        for(let i=0; i<CARD_PAIRS.length; i++) {
+            arr_fillDeck.push(CARD_PAIRS[i]);
+            arr_fillDeck.push(CARD_PAIRS[i]);
+        }
+        return arr_fillDeck;
+    } else {
+        console.error('The number of card pairs is incorrect. There must be two of each kind');
+    }
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -62,16 +80,20 @@ function shuffle(array) {
 
 // build the deck of cards depending up on how many cards there are
 function dealCards(deck) {
-    // check if cards exist in DOM
-        // if they do - clean board (remove items
+    // @todo check if cards exist in DOM
+        // @todo if they do - clean board (remove items)
     // build board
+        
         // get the ul with .deck
+        let cardDeck = document.querySelector('.deck');
         // for each value within the deck add the following:
-        /*
-            <li class="card">
-                <i class="fa"></i>
-            </li>
-        */
+        for(let card of deck) {
+            let cardItem = document.createElement('li');
+            cardItem.setAttribute('class', 'card open show');
+            cardItem.innerHTML = `<i class="fa fa-${card}"></i>`;
+            docFragment.appendChild(cardItem);
+        }
+        cardDeck.appendChild(docFragment);
         // add eventListener for ul .cards
         // add a value to each class by getting the deck and adding 'fa-' to the front of it.
 }
