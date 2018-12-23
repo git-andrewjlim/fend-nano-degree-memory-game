@@ -10,10 +10,16 @@
 </head>
 <body>
     <div class="modal">
-        <div class="modal-inner">
+        <div class="model-inner modal-inner-start">
             <h2>Welcome to the Match game</h2>
             <p>Lorum ipsum</p>
             <button class="start-button">Start Game</button>
+        </div>
+        <div class="model-inner modal-inner-end">
+            <h2>Congratulations!</h2>
+            <p>You won the game</p>
+            <p class="completion-text"></p>
+            <button class="replay-button">Replay Game</button>
         </div>
     </div>
     <div class="container">
@@ -26,7 +32,7 @@
 
         	<span class="moves"></span> Moves
 
-            <div class="restart">
+            <div class="restart-button">
         		<i class="fa fa-repeat"></i>
             </div>
             <span class="timer">0</span> Seconds
