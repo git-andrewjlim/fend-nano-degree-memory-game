@@ -109,6 +109,12 @@ function resetTimer() {
 // reset the turns
 function resetTurns() {
     turns = 0;
+    updateTurns(turns);
+}
+
+function updateTurns(turnNumber) {
+    let moves = document.querySelector('.moves');
+    moves.textContent = `${turnNumber}`;
 }
 
 // popup instructions with start game button.
@@ -125,8 +131,14 @@ function startTimer() {
 // reduce stars depending on how many turns the player had
 function reduceStars() {
     // get the last child of ul.stars
-    // if STARS % cardsMatched ==0 change the next fa-star to fa-star-o
-    // reduce starCount by one until it reaches zero.
+    if(turns % STAR_REDUCTION === 0) {
+        console.log('reduce stars');
+        let starList = document.querySelectorAll('.fa-star');
+        if (starList.length !== 0) {
+        let starLost = starList[starList.length-1];
+        starLost.setAttribute('class', 'fa fa-star-o');
+        }
+    }
 }
 
 // show Congratulations pop up and ask if they would like to play again.
@@ -240,7 +252,10 @@ function selectCard(e) {
             cardSelected = true;
         } else {
             card2 = cardNode;
-            flipCard(card2);           
+            flipCard(card2);
+            turns++;
+            updateTurns(turns); 
+            reduceStars();        
             cardNode.parentNode.removeEventListener('click', selectCard);
             match = checkMatch(card1, card2);
             if (match) {
@@ -252,7 +267,7 @@ function selectCard(e) {
                     flipCard(card2, 'reverse');
                     cardSelected = false;
                 cardNode.parentNode.addEventListener('click', selectCard);
-                }, 1000);
+                }, 500);
             }
             
             
