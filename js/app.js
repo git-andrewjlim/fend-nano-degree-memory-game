@@ -1,7 +1,7 @@
 /* --- GLOBAL VARIABLES --- */
 const CARDS = 16;
 const CARD_PAIRS = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
-const STARS = 3;
+let STARS = 3;
 const STAR_REDUCTION = CARD_PAIRS.length + 1;
 const docFragment = document.createDocumentFragment();
 const fontawesomePrefix = 'fa-';
@@ -16,6 +16,10 @@ let starCount = STARS; // tracks how many stars the user has.
 let checkEndGame = false; // track if the game should end.
 let deck = [];
 let card1, card2;
+let timerStart;
+
+let timerLocation = document.querySelector('.timer');
+let modalPanel = document.querySelector('.modal');
 
 // Set up board and initialise values
 function initialise() {
@@ -27,9 +31,11 @@ function initialise() {
         dealCards(deck);
         resetTimer();
         resetTurns();
+        advanceTimer();
         if (firstGame) {
             showInstructions();
         }
+
     } else {
         console.error('The number of card pairs is incorrect. There must be two of each kind');
     }
@@ -124,25 +130,48 @@ function showInstructions() {
     firstGame = false; 
 }
 
-function startTimer() {
+function advanceTimer() {
     // use set time out to increment by 1 every second
+    timerStart = window.setInterval(function(){
+        timer++;
+        timerLocation.textContent = `${timer}`;
+    }, 1000);
 }
 
 // reduce stars depending on how many turns the player had
 function reduceStars() {
     // get the last child of ul.stars
-    if(turns % STAR_REDUCTION === 0) {
-        console.log('reduce stars');
-        let starList = document.querySelectorAll('.fa-star');
-        if (starList.length !== 0) {
-        let starLost = starList[starList.length-1];
-        starLost.setAttribute('class', 'fa fa-star-o');
+    let starList = document.querySelectorAll('.fa-star');
+    if(turns % STAR_REDUCTION === 0 && STARS!== 0) {
+        
+        
+        if (STARS !== 0){ 
+            let starLost = starList[starList.length-1];
+            starLost.setAttribute('class', 'fa fa-star-o');
+            STARS--;           
         }
+        console.log('reduce stars');
+        console.log(STARS);
+        // let starList = document.querySelectorAll('.fa-star');
+        // if (starList.length !== 0) {
+        // let starLost = starList[starList.length-1];
+        // starLost.setAttribute('class', 'fa fa-star-o');
+        // }
     }
 }
 
 // show Congratulations pop up and ask if they would like to play again.
 function endGame() {
+    clearInterval(timerStart);
+    window.setTimeout(function(){
+        modalPanel.querySelector('.modal-inner').innerHTML = 
+        `<h1>Congratulations!</h1>
+        <p>You won the game</p>
+        <p>Your time was ${timer} seconds</p>
+        <p>You completed the game in ${turns} and earned ${STARS} star${STARS==1? '':'s'}</p>`;
+    modalPanel.style.cssText = 'display: block;'
+    }, 1000);
+    
     //show popup with time, stars and congratulations!
     //disable restart button
     //show play again button
@@ -200,21 +229,6 @@ function checkMatch(card1, card2) {
     }
 
     return match;
-
-
-    //card1Icon = card1.querySelector('.fa');
-    // if(cardNode.nodeName.toLowerCase() === 'li') {
-    //     cardIcon = cardNode.querySelector('.fa');
-    // } 
-
-    // let cardIconClasses = cardIcon.getAttribute('class').split(' ');
-
-    // // console.log(cardNode.getAttribute('class'));
-    // for(cardIconClass of cardIconClasses) {
-    //     if(cardIconClass.match(fontawesomePrefix)) {
-    //         console.log(cardIconClass);
-    //     }               
-    // }
 }
 
 
@@ -223,10 +237,14 @@ initialise();
 
 /* --- EVENT LISTENERS --- */
 // start button
+document.querySelector('.start-button').addEventListener('click', function(){
     // hide instructions
+    modalPanel.style.cssText = 'display: none;';
     // delete start button (you wont use it again)
     // startTimer();
     // enable reset button
+});
+
 
 // reset button
     // initialise
@@ -242,7 +260,7 @@ initialise();
 
 function selectCard(e) {
     let cardNode = e.target;
-    let match;
+    let match, gameEnded;
 
     // only activate if card is clicked (not the deck)
     if (cardNode.getAttribute('class') === 'card') {
@@ -261,6 +279,10 @@ function selectCard(e) {
             if (match) {
                 cardSelected = false;
                 cardNode.parentNode.addEventListener('click', selectCard);
+                cardsMatched=cardsMatched+2;
+                if (cardsMatched == CARDS) {
+                    endGame();
+                }
             } else {
                 window.setTimeout(function(){
                     flipCard(card1, 'reverse');
