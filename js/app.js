@@ -160,6 +160,10 @@ function reduceStars() {
     }
 }
 
+function startGame() {
+    
+}
+
 // show Congratulations pop up and ask if they would like to play again.
 function endGame() {
     clearInterval(timerStart);
@@ -247,9 +251,12 @@ document.querySelector('.start-button').addEventListener('click', function(){
 
 
 // reset button
+document.querySelector('.restart').addEventListener('click', function(){
+    alert('reset button pressed');
     // initialise
-    //startTimer();
+    // startTimer();
     // enable reset button
+});
 
 // play again (same as reset button)
     // initialise
