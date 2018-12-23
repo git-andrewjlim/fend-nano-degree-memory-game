@@ -6,7 +6,6 @@ const STAR_REDUCTION = CARD_PAIRS.length + 1;
 const docFragment = document.createDocumentFragment();
 const fontawesomePrefix = 'fa-';
 
-let firstGame = true; // determines whether instructions need to be shown at beginning of game.
 let turns = 0; // track how many guesses the user has made.
 let cardsMatched = 0; // track how many cards have been matched - if it equals CARDS then the game is over.
 let cardSelected = false; // track how many cards the user has chosen per turn (max: 2).
@@ -25,16 +24,14 @@ let modalPanel = document.querySelector('.modal');
 function initialise() {
     // check that CARD_PAIRS is half of CARDS (if not then throw error)
     if (CARD_PAIRS.length * 2 === CARDS){
-        setStars();
+        //setStars();
         deck = fillDeck();
         deck = shuffle(deck);
         dealCards(deck);
         resetTimer();
         resetTurns();
-        advanceTimer();
-        if (firstGame) {
-            showInstructions();
-        }
+        
+
 
     } else {
         console.error('The number of card pairs is incorrect. There must be two of each kind');
@@ -43,21 +40,25 @@ function initialise() {
 
 // Build the star value based upon constant STARS value
 function setStars() {
-    // if firstGame = true
-    if (firstGame) {
+
         // grab the ul with .stars
+        
         let starList = document.querySelector('.stars');
-        // for the numer of STARS value add <li><i class="fa fa-star"></i></li>
         let starItem = '<li><i class="fa fa-star"></i></li>';
-        for(let i=0; i<STARS; i++) {
-            let starItem = document.createElement('li');
-            starItem.innerHTML = '<i class="fa fa-star"></i>';
-            starList.appendChild(starItem);
+        if (starList.childNodes.length == 0) {
+            // for the numer of STARS value add <li><i class="fa fa-star"></i></li>            
+            for(let i=0; i<STARS; i++) {
+                let starItem = document.createElement('li');
+                starItem.innerHTML = '<i class="fa fa-star"></i>';
+                starList.appendChild(starItem);
+            }
+        } else {
+            for(let i=0;i<STARS; i++){
+                starList.childNodes[i].innerHTML = '<i class="fa fa-star"></i>';
+            }
         }
-    }else{
-        // @todo reset stars to fa-star (they would of been turned over)
-    }  
 }
+
 
 // build the deck and return the deck
 function fillDeck() {
@@ -93,7 +94,8 @@ function dealCards(deck) {
     // build board
         
         // get the ul with .deck
-        let cardDeck = document.querySelector('.deck');
+    let cardDeck = document.querySelector('.deck');
+    if (cardDeck.childNodes.length == 0) {
         // for each value within the deck add the following:
         for(let card of deck) {
             let cardItem = document.createElement('li');
@@ -105,6 +107,15 @@ function dealCards(deck) {
         // add eventListener for ul .cards
         cardDeck.addEventListener('click', selectCard);
         // add a value to each class by getting the deck and adding 'fa-' to the front of it.
+    } 
+}
+
+function clearBoard() {
+    //clear the cards
+    let cardDeck = document.querySelector('.deck');
+    while(cardDeck.firstChild) {
+        cardDeck.removeChild(cardDeck.firstChild);
+    }
 }
 
 // reset the timer to 0
@@ -118,17 +129,16 @@ function resetTurns() {
     updateTurns(turns);
 }
 
+function resetStars() {
+    STARS = 3;
+    setStars();
+}
+
 function updateTurns(turnNumber) {
     let moves = document.querySelector('.moves');
     moves.textContent = `${turnNumber}`;
 }
 
-// popup instructions with start game button.
-function showInstructions() {
-    //show popup
-    //activate event lister on start
-    firstGame = false; 
-}
 
 function advanceTimer() {
     // use set time out to increment by 1 every second
@@ -161,19 +171,36 @@ function reduceStars() {
 }
 
 function startGame() {
-    
+    clearInterval(timerStart);
+    resetTimer();
+    resetTurns();
+    advanceTimer();
+    resetStars();
+    deck = shuffle(deck);
+    clearBoard();
+    dealCards(deck);
 }
 
 // show Congratulations pop up and ask if they would like to play again.
 function endGame() {
     clearInterval(timerStart);
     window.setTimeout(function(){
-        modalPanel.querySelector('.modal-inner').innerHTML = 
+    modalPanel.querySelector('.modal-inner').innerHTML = 
         `<h1>Congratulations!</h1>
         <p>You won the game</p>
         <p>Your time was ${timer} seconds</p>
-        <p>You completed the game in ${turns} and earned ${STARS} star${STARS==1? '':'s'}</p>`;
-    modalPanel.style.cssText = 'display: block;'
+        <p>You completed the game in ${turns} and earned ${STARS} star${STARS==1? '':'s'}</p>
+        <p><button class="play-again">Play Again</button></p>`;
+    modalPanel.style.cssText = 'display: block';
+    document.querySelector('.play-again').addEventListener('click', function(){
+        modalPanel.style.cssText = 'display: none';
+        startGame();
+            // initialise
+            // remove endGame panel
+            // checkEndGame = false;
+            // startTimer();
+            // enable reset button
+    });
     }, 1000);
     
     //show popup with time, stars and congratulations!
@@ -244,6 +271,7 @@ initialise();
 document.querySelector('.start-button').addEventListener('click', function(){
     // hide instructions
     modalPanel.style.cssText = 'display: none;';
+    startGame();
     // delete start button (you wont use it again)
     // startTimer();
     // enable reset button
@@ -252,18 +280,14 @@ document.querySelector('.start-button').addEventListener('click', function(){
 
 // reset button
 document.querySelector('.restart').addEventListener('click', function(){
-    alert('reset button pressed');
+    startGame();
     // initialise
     // startTimer();
     // enable reset button
 });
 
 // play again (same as reset button)
-    // initialise
-    // remove endGame panel
-    // checkEndGame = false;
-    // startTimer();
-    // enable reset button
+
 
 function selectCard(e) {
     let cardNode = e.target;
