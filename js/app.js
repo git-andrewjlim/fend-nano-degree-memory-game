@@ -4,6 +4,7 @@ const CARD_PAIRS = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf'
 const STARS = 3;
 const STAR_REDUCTION = CARD_PAIRS.length + 1;
 const docFragment = document.createDocumentFragment();
+const fontawesomePrefix = 'fa-';
 
 let firstGame = true; // determines whether instructions need to be shown at beginning of game.
 let turns = 0; // track how many guesses the user has made.
@@ -14,17 +15,23 @@ let resetButtonActive = false; // sets state of reset button eventListener
 let starCount = STARS; // tracks how many stars the user has.
 let checkEndGame = false; // track if the game should end.
 let deck = [];
+let card1, card2;
 
 // Set up board and initialise values
 function initialise() {
-    setStars();
-    deck = fillDeck();
-    deck = shuffle(deck);
-    dealCards(deck);
-    resetTimer();
-    resetTurns();
-    if (firstGame) {
-        showInstructions();
+    // check that CARD_PAIRS is half of CARDS (if not then throw error)
+    if (CARD_PAIRS.length * 2 === CARDS){
+        setStars();
+        deck = fillDeck();
+        deck = shuffle(deck);
+        dealCards(deck);
+        resetTimer();
+        resetTurns();
+        if (firstGame) {
+            showInstructions();
+        }
+    } else {
+        console.error('The number of card pairs is incorrect. There must be two of each kind');
     }
 }
 
@@ -48,18 +55,13 @@ function setStars() {
 
 // build the deck and return the deck
 function fillDeck() {
-    // check that CARD_PAIRS is half of CARDS (if not then throw error)
     let arr_fillDeck = [];
-    if (CARD_PAIRS.length * 2 === CARDS){
-        // Create an array and put in each value twice // can use CARDS as the count
-        for(let i=0; i<CARD_PAIRS.length; i++) {
-            arr_fillDeck.push(CARD_PAIRS[i]);
-            arr_fillDeck.push(CARD_PAIRS[i]);
-        }
-        return arr_fillDeck;
-    } else {
-        console.error('The number of card pairs is incorrect. There must be two of each kind');
+    // Create an array and put in each value twice // can use CARDS as the count
+    for(let i=0; i<CARD_PAIRS.length; i++) {
+        arr_fillDeck.push(CARD_PAIRS[i]);
+        arr_fillDeck.push(CARD_PAIRS[i]);
     }
+    return arr_fillDeck;
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -89,12 +91,13 @@ function dealCards(deck) {
         // for each value within the deck add the following:
         for(let card of deck) {
             let cardItem = document.createElement('li');
-            cardItem.setAttribute('class', 'card open show');
+            cardItem.setAttribute('class', 'card');
             cardItem.innerHTML = `<i class="fa fa-${card}"></i>`;
             docFragment.appendChild(cardItem);
         }
         cardDeck.appendChild(docFragment);
         // add eventListener for ul .cards
+        cardDeck.addEventListener('click', selectCard);
         // add a value to each class by getting the deck and adding 'fa-' to the front of it.
 }
 
@@ -134,7 +137,14 @@ function endGame() {
 }
 
 //flip card and nominate direction (optional)
-function flipCard(card, direction) {
+function flipCard(card, flipDirection) {
+    if(flipDirection != 'reverse') {
+        card.setAttribute('class', 'card open show');
+    } else {
+        card.setAttribute('class', 'card');
+    }
+
+    
     // direction it can be forwards (blank) or reverse
     // get card selected
     // check direction
@@ -153,6 +163,46 @@ function flipCard(card, direction) {
                     //changes opacity to 0
                     //changes card face opacity to 100
                     //expands card face
+}
+
+function getIcon(cardIcon) {
+    cardIcon = cardIcon.querySelector('.fa');
+    let cardIconClasses = cardIcon.getAttribute('class').split(' ');
+    for(cardIconClass of cardIconClasses) {
+        if(cardIconClass.match(fontawesomePrefix)) {
+            return cardIconClass;
+        }               
+    }
+}
+
+function checkMatch(card1, card2) {
+    let card1Icon, card2Icon;
+    let match;
+
+    card1Icon = getIcon(card1);
+    card2Icon = getIcon(card2);
+    if(card1Icon === card2Icon) {
+        match = true;
+    } else {
+        match = false;
+    }
+
+    return match;
+
+
+    //card1Icon = card1.querySelector('.fa');
+    // if(cardNode.nodeName.toLowerCase() === 'li') {
+    //     cardIcon = cardNode.querySelector('.fa');
+    // } 
+
+    // let cardIconClasses = cardIcon.getAttribute('class').split(' ');
+
+    // // console.log(cardNode.getAttribute('class'));
+    // for(cardIconClass of cardIconClasses) {
+    //     if(cardIconClass.match(fontawesomePrefix)) {
+    //         console.log(cardIconClass);
+    //     }               
+    // }
 }
 
 
@@ -178,13 +228,56 @@ initialise();
     // startTimer();
     // enable reset button
 
-// cards (on cards click - put on parent)
-    // check if cardSelected = false;
-        // if cardSelected = false;(1st choice) - allow another card to be flipped
-            // flipcard(this)
-            // set show on card (this is what you will search against)
-            // set cardSelected = true
-        // if cardSelected = true; (2nd choice)
+function selectCard(e) {
+    let cardNode = e.target;
+    let match;
+
+    // only activate if card is clicked (not the deck)
+    if (cardNode.getAttribute('class') === 'card') {
+        if (cardSelected === false) {
+            card1 = cardNode;
+            flipCard(card1);
+            cardSelected = true;
+        } else {
+            card2 = cardNode;
+            flipCard(card2);           
+            cardNode.parentNode.removeEventListener('click', selectCard);
+            match = checkMatch(card1, card2);
+            if (match) {
+                cardSelected = false;
+                cardNode.parentNode.addEventListener('click', selectCard);
+            } else {
+                window.setTimeout(function(){
+                    flipCard(card1, 'reverse');
+                    flipCard(card2, 'reverse');
+                    cardSelected = false;
+                cardNode.parentNode.addEventListener('click', selectCard);
+                }, 1000);
+            }
+            
+            
+        }
+    }
+
+
+    
+    
+    
+    
+    
+    
+    
+
+
+    // console.log(cardIcon);
+
+    // // if cardSelected = false;(1st choice) - allow another card to be flipped
+    // if (cardSelected === false) {
+    //         // flipcard(this)
+    //         // set show on card (this is what you will search against)
+    //         // set cardSelected = true
+    // } else {
+    // if cardSelected = true; (2nd choice)
             //disable eventListeners on cards
             // check classes for show (this should be the other)
             // get its icon class
@@ -198,12 +291,13 @@ initialise();
                 //if it is not a match        
                     //remove show on other card
                     // flipCards(this, 'reverse')
-                    // reinstate eventListeners on cards
-    // check if STAR_REDUCTION === turns
-        // if true - reduceStars()
-    // check if checkEndGame = true;
-        // if true - endGame() 
-    
+                    // reinstate eventListeners on card
+//     }
+//     // check if STAR_REDUCTION === turns
+//         // if true - reduceStars()
+//     // check if checkEndGame = true;
+//         // if true - endGame() 
+}  
     
 
 
