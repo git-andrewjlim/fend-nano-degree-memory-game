@@ -1,3 +1,7 @@
+// AUTHOR: ANDREW LIM
+// GITHUB: https://github.com/git-andrewjlim/fend-nanodegree-memory-game
+
+
 // ===============
 // GLOBAL VARIABLES
 // ===============
@@ -51,7 +55,7 @@ initialise();
 // INITIALISE THE PROGRAM
 function initialise() {
     // fill out text for introduction popup
-    $modalStartContent.querySelector('.stars-text').innerHTML = `You lose a <i class="fa fa-star"></i> for every ${STAR_REDUCTION} turns taken.`
+    $modalStartContent.querySelector('.stars-text').innerHTML = `${STAR_REDUCTION}`;
     deck = fillDeck();
     deck = shuffle(deck);
     buildBoard();
@@ -69,13 +73,14 @@ function buildBoard() {
 function clearBoard() {
     let cardDeck = $deck;
 
+    // reset board elements
     cardsMatched = 0;
     clearInterval(timerStart);
     resetTimer();
     resetTurns();
     resetStars();
 
-    // clear the cards   
+    // clear the cards so it can be rebuilt
     while(cardDeck.firstChild) {
         cardDeck.removeChild(cardDeck.firstChild);
     }
@@ -83,7 +88,7 @@ function clearBoard() {
 
 
 // START THE GAME
-function startGame() { 
+function startGame() {
     advanceTimer();
     deck = shuffle(deck);
     dealCards(deck);
@@ -94,14 +99,17 @@ function setStars() {
         let starList = $stars;
         let starItem = '<li><i class="fa fa-star"></i></li>';
 
+        // determine whether stars need to be added or reset
         if (starList.childNodes.length == 0) {
-            // for the numer of stars value add <li><i class="fa fa-star"></i></li>            
+
+            // add the stars to the board
             for(let i=0; i<stars; i++) {
                 let starItem = document.createElement('li');
                 starItem.innerHTML = '<i class="fa fa-star"></i>';
                 starList.appendChild(starItem);
             }
         } else {
+            // reset stars that alredy exist
             for(let i=0;i<stars; i++){
                 starList.childNodes[i].innerHTML = '<i class="fa fa-star"></i>';
             }
@@ -121,6 +129,7 @@ function fillDeck() {
     return arr_fillDeck;
 }
 
+
 // SHUFFLE CARDS (http://stackoverflow.com/a/2450976)
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -136,10 +145,12 @@ function shuffle(array) {
     return array;
 }
 
+
 // ADD THE CARDS TO THE DOM
 function dealCards(deck) {
     let cardDeck = $deck;
 
+    // build the cards within the deck
     if (cardDeck.childNodes.length == 0) {
         for(let card of deck) {
             let cardItem = document.createElement('li');
@@ -148,6 +159,7 @@ function dealCards(deck) {
             DOCUMENT_FRAGMENT.appendChild(cardItem);
         }
 
+        // add the cards to the DOM
         cardDeck.appendChild(DOCUMENT_FRAGMENT);
         cardDeck.addEventListener('click', selectCard);
     } 
@@ -194,32 +206,35 @@ function advanceTimer() {
 function reduceStars() {
     let starList = document.querySelectorAll('.fa-star');
 
+    // determine whether star should be removed
     if(turns % STAR_REDUCTION === 0 && stars!== 0) {
-        if (stars !== 0){ 
-            let starLost = starList[starList.length-1];
-            starLost.setAttribute('class', 'fa fa-star-o');
-            stars--;           
-        }
+        // change the rightmost star to an empty star
+        let starLost = starList[starList.length-1];
+        starLost.setAttribute('class', 'fa fa-star-o');
+        stars--;
     }
 }
 
 
 // DISPLAY ENDING MESSAGE AND ALLOW FOR REPLAY
 function endGame() {
+    // prevent timer from advancing
     clearInterval(timerStart);
-    window.setTimeout(function(){
-        $modalEndContent.querySelector('.completion-text').innerHTML = 
+
+    // display the end message
+    $modalEndContent.querySelector('.completion-text').innerHTML = 
         `<p>Your time was ${timer} seconds</p>
         <p>You completed the game in ${turns} moves and earned ${stars} star${stars==1? '':'s'}</p>`;
-        $modal.style.cssText = 'display: block';
-        $modalStartContent.style.cssText = 'display: none';
-        $modalEndContent.style.cssText = 'display: block';
-        $replayBtn.addEventListener('click', function(){
-            $modal.style.cssText = 'display: none';
-            buildBoard();
-            startGame();
-        });
-    }, 1000);
+    $modal.style.cssText = 'display: block';
+    $modalStartContent.style.cssText = 'display: none';
+    $modalEndContent.style.cssText = 'display: block';
+
+    //activate the replay button
+    $replayBtn.addEventListener('click', function() {
+        $modal.style.cssText = 'display: none';
+        buildBoard();
+        startGame();
+    });
 }
 
 
@@ -230,24 +245,19 @@ function flipCard(card, flipDirection) {
     } else {
         card.setAttribute('class', 'card');
     }
-
-    // @TODO FLIPPING MECHANICS
-        //minimises card face
-        //changes opacity to 0
-        //changes card back opacity to 100
-        //expands card back
-        //NOTE: Want to do it this way because in future may want to use an image instead of a card
 }
 
 
 // RETURN ICON OF CARD
 function getIcon(cardIcon) {
     cardIcon = cardIcon.querySelector('.fa');
+
+    //extract the icon from the card
     let cardIconClasses = cardIcon.getAttribute('class').split(' ');
     for(cardIconClass of cardIconClasses) {
         if(cardIconClass.match(FONTAWESOME_PREFIX)) {
             return cardIconClass;
-        }               
+        }
     }
 }
 
@@ -257,8 +267,11 @@ function checkMatch(card1, card2) {
     let card1Icon, card2Icon;
     let match;
 
+    // get the icons
     card1Icon = getIcon(card1);
     card2Icon = getIcon(card2);
+
+    // compare the icons
     if(card1Icon === card2Icon) {
         match = true;
     } else {
@@ -276,33 +289,55 @@ function selectCard(e) {
 
     // only activate if card is clicked (not the deck)
     if (cardNode.getAttribute('class') === 'card') {
+
+        // determin whether this is the first card selected
         if (cardSelected === false) {
+            // show icon of card
             card1 = cardNode;
             flipCard(card1);
+
+            // indicate that the first card has been selected
             cardSelected = true;
         } else {
+            // show icon of card
             card2 = cardNode;
             flipCard(card2);
+
+            // update the turn counter
             turns++;
-            updateTurns(turns); 
-            reduceStars();        
+            updateTurns(turns);
+
+            // check whether the star need to be reduced
+            reduceStars();
+
+            // prevent other cards from being selected
             cardNode.parentNode.removeEventListener('click', selectCard);
+
+            // check if selected cards are a match
             match = checkMatch(card1, card2);
             if (match) {
-                cardSelected = false;
+                // reinstate ability to select cards
                 cardNode.parentNode.addEventListener('click', selectCard);
+
+                // indicate that a pair has been found
                 cardsMatched=cardsMatched+2;
+
+                // determine if cards
                 if (cardsMatched == CARDS) {
+                    // show congratulations panel and end game
                     endGame();
                 }
             } else {
                 window.setTimeout(function(){
                     flipCard(card1, 'reverse');
                     flipCard(card2, 'reverse');
-                    cardSelected = false;
-                cardNode.parentNode.addEventListener('click', selectCard);
+                    // reinstate ability to select cards (after cards have been flipped)
+                    cardNode.parentNode.addEventListener('click', selectCard);
                 }, 500);
-            }            
+            }
+
+            // reset so that new card pairs can be selected
+            cardSelected = false;
         }
     }
 }
@@ -320,9 +355,6 @@ $startBtn.addEventListener('click', function(){
     // hide instructions
     $modal.style.cssText = 'display: none;';
     startGame();
-    // delete start button (you wont use it again)
-    // startTimer();
-    // enable reset button
 });
 
 
@@ -330,7 +362,4 @@ $startBtn.addEventListener('click', function(){
 $restartBtn.addEventListener('click', function(){
     buildBoard();
     startGame();
-    // initialise
-    // startTimer();
-    // enable reset button
 });
