@@ -4,7 +4,7 @@
 
 const CARD_PAIRS = ['diamond', 'paper-plane-o', 'anchor', 'bolt', 'cube', 'leaf', 'bicycle', 'bomb'];
 const CARDS = CARD_PAIRS.length * 2;
-const STAR_REDUCTION = CARD_PAIRS.length + 1;
+const STAR_REDUCTION = CARD_PAIRS.length *2;
 const DOCUMENT_FRAGMENT = document.createDocumentFragment();
 const FONTAWESOME_PREFIX = 'fa-';
 const STARS = 3;
@@ -50,6 +50,8 @@ initialise();
 
 // INITIALISE THE PROGRAM
 function initialise() {
+    // fill out text for introduction popup
+    $modalStartContent.querySelector('.stars-text').innerHTML = `You lose a <i class="fa fa-star"></i> for every ${STAR_REDUCTION} turns taken.`
     deck = fillDeck();
     deck = shuffle(deck);
     buildBoard();
@@ -265,6 +267,7 @@ function checkMatch(card1, card2) {
 
     return match;
 }
+
 
 // CONTROL CARD EVENT HANDLER
 function selectCard(e) {
