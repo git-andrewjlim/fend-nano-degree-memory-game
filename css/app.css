@@ -163,6 +163,6 @@ h1 {
 @media screen and (max-width: 900px) {
     .deck {
         width: 790px;
-        padding: 10px 523px;
+        padding: 10px 35px;
     }
 }
