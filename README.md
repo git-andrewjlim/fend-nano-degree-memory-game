@@ -1,6 +1,6 @@
 # Memory Game Project
 
-This Memory Game project is the second project for the <a target="_blank" href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">Udacity Front-End Web Developer Nanodegree</a>.
+This Memory Game project is the second project for the <a target="_blank" href="https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001">Udacity Front-End Web Developer Nanodegree</a>.
 
 
 ## Project Link
