@@ -44,10 +44,10 @@ body {
 .modal>.model-inner {
     position: relative;
     padding: 20px;
-    width: 50%;
+    width: 90%;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
     background-color: #8fd5d6;
-    margin-top: 200px;
+    margin-top: 150px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -66,6 +66,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -73,15 +74,20 @@ h1 {
     font-weight: 300;
 }
 
+h2 {
+    font-size: 1.2em;
+}
+
 /*
  * Styles for the deck of cards
  */
 
 .deck {
-    width: 660px;
-    min-height: 680px;
+    /* width: 660px; */
+    width: 340px;
+    min-height: 0px;
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
-    padding: 32px;
+    padding: 12px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
     display: flex;
@@ -92,8 +98,9 @@ h1 {
 }
 
 .deck .card {
-    height: 125px;
-    width: 125px;
+    height: 70px;
+    width: 70px;
+    margin: 4px;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -150,4 +157,39 @@ h1 {
 
 .timer {
     margin-left: 10px;
+}
+
+@media screen and (min-width: 361px) {
+    .deck {
+        width: 400px;
+        padding: 32px;
+    }
+
+    .modal>.model-inner {
+        width: 90%;
+        margin-top: 200px;
+    }
+
+    .modal>.model-inner h2 {
+        font-size: 1.5em;
+    }
+}
+
+@media screen and (min-width: 412px) {
+    .deck {
+        width: 660px;
+        min-height: 680px;
+        padding: 32px;
+    }
+    
+    .deck .card {
+        height: 125px;
+        width: 125px;
+        margin: 0px;
+    }
+
+    .modal>.model-inner {
+        width: 50%;
+        margin-top: 200px;
+    }
 }
