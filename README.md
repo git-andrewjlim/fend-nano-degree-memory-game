@@ -25,11 +25,14 @@ To work with the files:
 3. Unzip the files on your computer
 4. Open the index.html file within an Internet browser
 
-Alternatively, if you have GitHub installed
+Alternatively, if you have GitHub installed:
 1. Click on the 'Clone or download' button.
 2. Copy the github .git URL file (e.g. https://github.com/git-andrewjlim/fend-nanodegree-memory-game.git)
 2. Navigate to your GitHub repository location on your computer
 3. In your console type 'git clone ' and paste the .git URL
+```
+git clone https://github.com/git-andrewjlim/fend-nanodegree-memory-game.git
+```
 4. Open the downloaded index.html file within an Internet browser
 
 
