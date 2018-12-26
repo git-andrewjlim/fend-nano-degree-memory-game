@@ -1,3 +1,5 @@
+![Image of memory game board](https://git-andrewjlim.github.io/fend-nanodegree-memory-game/img/nanodegree_memory_game.png "Memory Game Project")
+
 # Memory Game Project
 
 This Memory Game project is the second project for the <a target="_blank" href="https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001">Udacity Front-End Web Developer Nanodegree</a>.
