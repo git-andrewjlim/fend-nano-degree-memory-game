@@ -3,6 +3,10 @@
 This Memory Game project is the second project for the [Udacity Front-End Web Developer Nanodegree](https://help.github.com/articles/basic-writing-and-formatting-syntax/).
 
 
+## Project Link
+[Link to project](https://git-andrewjlim.github.io/fend-nanodegree-memory-game/)
+
+
 ## Topics Covered
 The project encompases all the following topics of the 'JavaScript and the DOM' chapter:
 
