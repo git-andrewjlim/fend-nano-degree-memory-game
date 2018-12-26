@@ -25,7 +25,7 @@ The project encompases all the following topics of the 'JavaScript and the DOM' 
 * Timing Events (setTimeout() & setInterval())
 
 
-## Acknowldedgments
+## Acknowledgments
 The original HTML and CSS templates were provided as a basis and was slightly manipulated to dynamically build the board.
 
 The Shuffle function was provided to students for this project.
