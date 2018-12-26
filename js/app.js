@@ -97,7 +97,6 @@ function startGame() {
 // SET THE NUMBER OF STARS
 function setStars() {
         let starList = $stars;
-        let starItem = '<li><i class="fa fa-star"></i></li>';
 
         // determine whether stars need to be added or reset
         if (starList.childNodes.length == 0) {

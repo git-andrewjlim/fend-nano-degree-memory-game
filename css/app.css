@@ -79,7 +79,6 @@ h1 {
 
 .deck {
     width: 660px;
-    /* max-width: 100%; */
     min-height: 680px;
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
@@ -152,17 +151,3 @@ h1 {
 .timer {
     margin-left: 10px;
 }
-
-/* @media screen and (max-width: 640px) {
-    .deck {
-        width: 560px;
-        padding: 13px;
-    }
-}
-
-@media screen and (max-width: 900px) {
-    .deck {
-        width: 790px;
-        padding: 10px 35px;
-    }
-} */
