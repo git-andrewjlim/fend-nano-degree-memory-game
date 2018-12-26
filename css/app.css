@@ -152,3 +152,17 @@ h1 {
 .timer {
     margin-left: 10px;
 }
+
+@media screen and (max-width: 640px) {
+    .deck {
+        width: 560px;
+        padding: 13px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .deck {
+        width: 790px;
+        padding: 10px 523px;
+    }
+}
