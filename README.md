@@ -1,6 +1,6 @@
 # Memory Game Project
 
-This Memory Game project is the second project for the [Udacity Front-End Web Developer Nanodegree](https://help.github.com/articles/basic-writing-and-formatting-syntax/).
+This Memory Game project is the second project for the <a target="_blank" href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">Udacity Front-End Web Developer Nanodegree</a>.
 
 
 ## Project Link
@@ -27,4 +27,4 @@ The project encompases all the following topics of the 'JavaScript and the DOM' 
 
 ## Acknowldedgments
 The Shuffle function was provided to students for this project.
-The reference of this is from; [http://stackoverflow.com/a/2450976](http://stackoverflow.com/a/2450976)
+The reference of this is from; <a target="_blank" href="http://stackoverflow.com/a/2450976">http://stackoverflow.com/a/2450976</a>
