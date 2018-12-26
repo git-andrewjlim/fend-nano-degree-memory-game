@@ -207,7 +207,7 @@ function reduceStars() {
     let starList = document.querySelectorAll('.fa-star');
 
     // determine whether star should be removed
-    if(turns % STAR_REDUCTION === 0 && stars!== 0) {
+    if(turns % STAR_REDUCTION === 0 && stars!== 1) {
         // change the rightmost star to an empty star
         let starLost = starList[starList.length-1];
         starLost.setAttribute('class', 'fa fa-star-o');
